@@ -1,0 +1,6 @@
+{
+  "name": "SwiftCart - Hyper-Local Quick-Commerce Platform",
+  "description": "Production-grade quick-commerce platform with hyper-local dark stores, sub-10 minute live GPS delivery tracking, high-concurrency ACID inventory locking, Kafka event pipeline, and instant storefront.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
