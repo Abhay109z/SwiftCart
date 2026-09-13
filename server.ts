@@ -3,7 +3,10 @@ import path from 'path';
 import { app } from './backend/server.ts';
 
 const rootDir = process.cwd();
-const PORT = process.env.RENDER ? Number(process.env.PORT || 10000) : 3000;
+const isRender = Boolean(process.env.RENDER || process.env.RENDER_SERVICE_ID);
+const PORT = isRender || (process.env.PORT && process.env.PORT !== '8080')
+  ? parseInt(process.env.PORT || '10000', 10)
+  : 3000;
 
 app.use(express.static(path.join(rootDir, 'dist')));
 
