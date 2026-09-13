@@ -19,6 +19,7 @@ export function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeOrder, setActiveOrder] = useState<Order | null>(null);
+  const [backendConnected, setBackendConnected] = useState<boolean>(true);
 
   // AI Substitution state
   const [substitutionModalOpen, setSubstitutionModalOpen] = useState(false);
@@ -38,11 +39,13 @@ export function App() {
           const dsData = await dsRes.json();
           setDarkStores(dsData.all || []);
           setActiveDarkStore(dsData.nearest || dsData.all?.[0] || null);
+          setBackendConnected(true);
         }
 
         if (prodRes.ok) {
           const prodData = await prodRes.json();
           setProducts(prodData.products || []);
+          setBackendConnected(true);
         }
       } catch (err) {
         console.error('Initial data fetch error:', err);
@@ -199,6 +202,7 @@ export function App() {
         onSelectDarkStore={(ds) => setActiveDarkStore(ds)}
         hasActiveOrder={!!activeOrder}
         dbStatus={dbStatus}
+        backendConnected={backendConnected}
       />
 
       {/* Main Content Area */}

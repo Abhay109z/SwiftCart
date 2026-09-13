@@ -21,6 +21,7 @@ interface HeaderProps {
   onSelectDarkStore: (store: DarkStore) => void;
   hasActiveOrder: boolean;
   dbStatus?: any;
+  backendConnected?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -33,7 +34,8 @@ export const Header: React.FC<HeaderProps> = ({
   activeDarkStore,
   onSelectDarkStore,
   hasActiveOrder,
-  dbStatus
+  dbStatus,
+  backendConnected = true
 }) => {
   return (
     <header id="app-header" className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-yellow-200/80 shadow-xs">
@@ -62,6 +64,16 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               </div>
             </button>
+
+            {/* Render Backend Connection Indicator */}
+            <div
+              className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-medium border border-emerald-200/80 shadow-2xs"
+              title="Connected to Render Backend (https://swiftcart-wjbj.onrender.com)"
+            >
+              <span className={`w-1.5 h-1.5 rounded-full ${backendConnected ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
+              <span className="font-semibold text-stone-700">Backend:</span>
+              <span className="text-emerald-700 font-bold">{backendConnected ? 'Render Online' : 'Connecting...'}</span>
+            </div>
 
             {/* Hyper-Local Delivery Location Selector */}
             <div className="hidden lg:flex items-center ml-2 pl-3 border-l border-stone-200">

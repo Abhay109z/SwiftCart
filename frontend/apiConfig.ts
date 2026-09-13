@@ -2,11 +2,10 @@
 
 /**
  * API Configuration for SwiftCart
- * Supports full-stack monolithic deployment, local AI Studio preview,
- * and decoupled Vercel frontend + Render backend architecture.
+ * Connected directly to Render backend: https://swiftcart-wjbj.onrender.com
  */
 
-const RENDER_BACKEND_URL = 'https://swiftcart-wjbj.onrender.com';
+export const RENDER_BACKEND_URL = 'https://swiftcart-wjbj.onrender.com';
 
 export function getBackendBaseUrl(): string {
   // 1. Explicit Vite env variable if provided
@@ -15,16 +14,8 @@ export function getBackendBaseUrl(): string {
     return String(envBackendUrl).replace(/\/+$/, '');
   }
 
-  // 2. If running on Vercel or any remote frontend domain, route directly to Render backend
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    if (hostname.includes('vercel.app') || hostname.includes('swiftcart')) {
-      return RENDER_BACKEND_URL;
-    }
-  }
-
-  // 3. In local dev, AI Studio preview, or same-origin container, use relative paths
-  return '';
+  // 2. Direct connection to live Render backend
+  return RENDER_BACKEND_URL;
 }
 
 export function getApiUrl(path: string): string {
@@ -34,3 +25,4 @@ export function getApiUrl(path: string): string {
 }
 
 export const BACKEND_URL = getBackendBaseUrl();
+
