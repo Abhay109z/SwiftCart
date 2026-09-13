@@ -12,6 +12,7 @@ import {
   Lock
 } from 'lucide-react';
 import { CartItem, DarkStore, Order } from '../types.js';
+import { getApiUrl } from '../apiConfig.js';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -67,7 +68,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         darkStoreId: activeDarkStore?.id || 'ds-blr-01'
       };
 
-      const res = await fetch('/api/checkout', {
+      const res = await fetch(getApiUrl('/api/checkout'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

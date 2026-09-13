@@ -13,6 +13,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { Order, Product } from '../types.js';
+import { getApiUrl } from '../apiConfig.js';
 
 interface OrderTrackingViewProps {
   order: Order;
@@ -50,7 +51,7 @@ export const OrderTrackingView: React.FC<OrderTrackingViewProps> = ({
 
     const fetchTracking = async () => {
       try {
-        const res = await fetch(`/api/orders/${order.id}/tracking`);
+        const res = await fetch(getApiUrl(`/api/orders/${order.id}/tracking`));
         if (res.ok && isMounted) {
           const data = await res.json();
           setTrackingData({

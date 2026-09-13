@@ -15,6 +15,7 @@ import {
   Zap
 } from 'lucide-react';
 import { ConcurrencyTestResult, DLQMessage, KafkaEvent, SurgeZone } from '../types.js';
+import { getApiUrl } from '../apiConfig.js';
 
 export const ArchitectureTelemetry: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'concurrency' | 'kafka' | 'surge' | 'specs'>('concurrency');
@@ -36,7 +37,7 @@ export const ArchitectureTelemetry: React.FC = () => {
   const loadKafkaData = async () => {
     setIsRefreshingKafka(true);
     try {
-      const res = await fetch('/api/kafka/events');
+      const res = await fetch(getApiUrl('/api/kafka/events'));
       const data = await res.json();
       setEvents(data.events || []);
       setDlqMessages(data.dlq || []);
@@ -49,7 +50,7 @@ export const ArchitectureTelemetry: React.FC = () => {
 
   const loadSurgeData = async () => {
     try {
-      const res = await fetch('/api/surge/zones');
+      const res = await fetch(getApiUrl('/api/surge/zones'));
       const data = await res.json();
       setSurgeZones(data.zones || []);
     } catch (err) {
@@ -65,7 +66,7 @@ export const ArchitectureTelemetry: React.FC = () => {
   const handleRunConcurrencyTest = async () => {
     setIsRunningTest(true);
     try {
-      const res = await fetch('/api/concurrency-test/run', {
+      const res = await fetch(getApiUrl('/api/concurrency-test/run'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -85,7 +86,7 @@ export const ArchitectureTelemetry: React.FC = () => {
 
   const handleRetryDLQ = async (dlqId: string) => {
     try {
-      await fetch('/api/kafka/dlq/retry', {
+      await fetch(getApiUrl('/api/kafka/dlq/retry'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ dlqId })

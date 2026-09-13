@@ -9,6 +9,7 @@ import { DarkStoreAdminPanel } from './components/DarkStoreAdminPanel.js';
 import { AISubstitutionModal } from './components/AISubstitutionModal.js';
 import { DeliveryPartnerSection } from './components/DeliveryPartnerSection.js';
 import { AppView, CartItem, DarkStore, Order, Product } from './types.js';
+import { getApiUrl } from './apiConfig.js';
 
 export function App() {
   const [currentView, setCurrentView] = useState<AppView>('storefront');
@@ -29,8 +30,8 @@ export function App() {
     async function loadInitialData() {
       try {
         const [dsRes, prodRes] = await Promise.all([
-          fetch('/api/dark-stores?lat=12.9352&lng=77.6245'),
-          fetch('/api/products')
+          fetch(getApiUrl('/api/dark-stores?lat=12.9352&lng=77.6245')),
+          fetch(getApiUrl('/api/products'))
         ]);
 
         if (dsRes.ok) {
@@ -53,7 +54,7 @@ export function App() {
 
   // Connect to Server-Sent Events (SSE) for live streaming
   useEffect(() => {
-    const eventSource = new EventSource('/api/events');
+    const eventSource = new EventSource(getApiUrl('/api/events'));
 
     eventSource.addEventListener('ai_substitution_alert', (e) => {
       try {
@@ -118,7 +119,7 @@ export function App() {
   const handleAppendForgottenItem = async (productId: string): Promise<boolean> => {
     if (!activeOrder) return false;
     try {
-      const res = await fetch(`/api/orders/${activeOrder.id}/append-item`, {
+      const res = await fetch(getApiUrl(`/api/orders/${activeOrder.id}/append-item`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId, quantity: 1 })
@@ -139,7 +140,7 @@ export function App() {
   // Trigger dark store picker out of stock simulation
   const handleTriggerPickerOutOfStock = async (productId: string) => {
     try {
-      const res = await fetch('/api/picker/out-of-stock', {
+      const res = await fetch(getApiUrl('/api/picker/out-of-stock'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId })
@@ -157,7 +158,7 @@ export function App() {
   const handleAcceptSubstitute = async (origId: string, subId: string) => {
     if (activeOrder) {
       try {
-        const res = await fetch(`/api/orders/${activeOrder.id}/accept-substitute`, {
+        const res = await fetch(getApiUrl(`/api/orders/${activeOrder.id}/accept-substitute`), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ originalProductId: origId, substituteProductId: subId })
@@ -175,7 +176,7 @@ export function App() {
 
   // Check MongoDB status
   useEffect(() => {
-    fetch('/api/db/status')
+    fetch(getApiUrl('/api/db/status'))
       .then((res) => res.json())
       .then((data) => setDbStatus(data))
       .catch((err) => console.warn('DB status check notice:', err));

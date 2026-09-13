@@ -10,6 +10,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { ProductBatch } from '../types.js';
+import { getApiUrl } from '../apiConfig.js';
 
 interface BatchWithDetails extends ProductBatch {
   productName: string;
@@ -31,7 +32,7 @@ export const DarkStoreAdminPanel: React.FC<DarkStoreAdminPanelProps> = ({
   const loadBatches = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/expiry-fifo/batches');
+      const res = await fetch(getApiUrl('/api/expiry-fifo/batches'));
       const data = await res.json();
       setBatches(data.batches || []);
     } catch (err) {
@@ -47,7 +48,7 @@ export const DarkStoreAdminPanel: React.FC<DarkStoreAdminPanelProps> = ({
 
   const handleApplyDiscount = async (batchId: string, percent: number) => {
     try {
-      await fetch('/api/expiry-fifo/discount', {
+      await fetch(getApiUrl('/api/expiry-fifo/discount'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ batchId, discountPercent: percent })

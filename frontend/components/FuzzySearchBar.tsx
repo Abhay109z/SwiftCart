@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, Sparkles, Clock } from 'lucide-react';
 import { Product } from '../types.js';
+import { getApiUrl } from '../apiConfig.js';
 
 interface FuzzySearchBarProps {
   onSelectProduct: (product: Product) => void;
@@ -27,7 +28,7 @@ export const FuzzySearchBar: React.FC<FuzzySearchBarProps> = ({ onSelectProduct,
     const timer = setTimeout(async () => {
       setIsSearching(true);
       try {
-        const res = await fetch(`/api/products/search?q=${encodeURIComponent(query)}`);
+        const res = await fetch(getApiUrl(`/api/products/search?q=${encodeURIComponent(query)}`));
         const data = await res.json();
         setResults(data.results || []);
         setLatencyMs(data.latencyMs || 0.4);

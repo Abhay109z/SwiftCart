@@ -21,6 +21,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { DarkStore, DeliveryPartnerApplication } from '../types.js';
+import { getApiUrl } from '../apiConfig.js';
 
 interface DeliveryPartnerSectionProps {
   darkStores: DarkStore[];
@@ -104,7 +105,7 @@ export const DeliveryPartnerSection: React.FC<DeliveryPartnerSectionProps> = ({
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/delivery-partners/apply', {
+      const response = await fetch(getApiUrl('/api/delivery-partners/apply'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

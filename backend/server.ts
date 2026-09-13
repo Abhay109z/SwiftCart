@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import cors from 'cors';
 import { aiSubstitutionEngine } from './engine/aiSubstitutionEngine.js';
 import { expiryManager } from './engine/expiryManager.js';
 import { geospatialEngine } from './engine/geospatialEngine.js';
@@ -10,6 +11,14 @@ import { DeliveryPartnerApplication, Order, OrderItem } from './types.js';
 import { getMongoDb, getMongoTelemetry, persistOrderToMongo, persistPartnerApplicationToMongo } from './db/mongodb.js';
 
 export const app = express();
+
+// Enable CORS for Vercel, localhost, and all client origins
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'X-Idempotency-Key', 'x-idempotency-key']
+}));
+
 app.use(express.json());
 
 // In-Memory active orders store
@@ -516,6 +525,8 @@ app.get('/api/events', (req: Request, res: Response) => {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Cache-Control');
   res.flushHeaders?.();
 
   sseClients.push(res);
